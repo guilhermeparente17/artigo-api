@@ -28,6 +28,7 @@ model User {
   articles Article[]
 
   comments Comment[]
+  likes Like[]
 }
 
 model Article {
@@ -43,6 +44,7 @@ model Article {
   userId String
   user User @relation(fields: [userId], references: [id])
   comments Comment[]
+  likes Like[]
 }
 
 model Comment {
@@ -56,4 +58,15 @@ model Comment {
 
   user User @relation(fields: [userId], references: [id])
   article Article @relation(fields: [articleId], references: [id])
+}
+
+model Like {
+  id String @id @default(uuid())
+  userId String
+  articleId String
+
+  user User @relation(fields: [userId], references: [id])
+  article Article @relation(fields: [articleId], references: [id])
+
+  @@unique([userId, articleId])
 }

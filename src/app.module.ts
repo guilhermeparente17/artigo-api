@@ -10,6 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 import { RequestContextService } from './common/services/request-context.service';
 import { ArticlesModule } from './modules/articles/articles.module';
 import { CommentsModule } from './modules/comments/comments.module';
+import { LikesModule } from './modules/likes/likes.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { CommentsModule } from './modules/comments/comments.module';
     AuthModule,
     ArticlesModule,
     CommentsModule,
+    LikesModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, RequestContextService],

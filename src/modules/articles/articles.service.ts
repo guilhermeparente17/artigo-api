@@ -85,8 +85,11 @@ export class ArticlesService {
           },
         },
 
-        //likes
-        //comments
+        _count: {
+          select: {
+            likes: true,
+          },
+        },
       },
     });
   }
