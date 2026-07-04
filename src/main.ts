@@ -13,6 +13,7 @@ async function bootstrap() {
   //Swagger
   const config = new DocumentBuilder()
     .setTitle('Artigo Api - Plataforma de artigos')
+    .addBearerAuth()
     .setDescription('Api para uso da plataforma Artigos')
     .setVersion('1')
     .build();

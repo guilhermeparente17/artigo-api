@@ -2,7 +2,6 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { RequestContextService } from 'src/common/services/request-context.service';
 
 @Injectable()
 export class UsersService {
@@ -14,6 +13,7 @@ export class UsersService {
         id: true,
         name: true,
         email: true,
+        role: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -43,6 +43,7 @@ export class UsersService {
         id: true,
         name: true,
         email: true,
+        role: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -65,14 +66,20 @@ export class UsersService {
         id: true,
         name: true,
         email: true,
+        role: true,
         createdAt: true,
         updatedAt: true,
       },
     });
   }
 
-  remove(id: string) {
-    return this.prisma.user.delete({
+  async remove(id: string) {
+    await this.prisma.article.deleteMany({
+      where: {
+        userId: id,
+      },
+    });
+    return await this.prisma.user.delete({
       where: {
         id,
       },
