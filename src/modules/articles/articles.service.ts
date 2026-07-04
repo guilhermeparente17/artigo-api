@@ -44,6 +44,7 @@ export class ArticlesService {
         cover: true,
         createdAt: true,
         updatedAt: true,
+
         //likes
         //comments
       },
@@ -68,6 +69,19 @@ export class ArticlesService {
             id: true,
             name: true,
             email: true,
+          },
+        },
+
+        comments: {
+          select: {
+            id: true,
+            content: true,
+            user: {
+              select: {
+                name: true,
+                email: true,
+              },
+            },
           },
         },
 

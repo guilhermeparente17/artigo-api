@@ -26,6 +26,8 @@ model User {
   role Role @default(USER)
 
   articles Article[]
+
+  comments Comment[]
 }
 
 model Article {
@@ -40,4 +42,18 @@ model Article {
 
   userId String
   user User @relation(fields: [userId], references: [id])
+  comments Comment[]
+}
+
+model Comment {
+  id String @id @default(uuid())
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  articleId String
+
+  user User @relation(fields: [userId], references: [id])
+  article Article @relation(fields: [articleId], references: [id])
 }
