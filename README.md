@@ -1,98 +1,317 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 📝 Artgios API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API REST para uma plataforma de publicação de artigos desenvolvida com NestJS.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+O objetivo do projeto é permitir que usuários criem uma conta, publiquem seus próprios artigos, interajam com publicações de outros usuários através de curtidas e comentários, além de gerenciar todo o seu conteúdo.
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🚀 Tecnologias
 
-## Project setup
+- NestJS
+- TypeScript
+- Prisma ORM
+- PostgreSQL
+- JWT Authentication
+- Bcrypt
+- Docker
+- PNPM
 
-```bash
-$ pnpm install
+---
+
+# ✨ Funcionalidades
+
+## Autenticação
+
+- Cadastro de usuário
+- Login com JWT
+- Rotas protegidas
+- Controle de permissões
+
+---
+
+## Usuários
+
+Cada usuário poderá:
+
+- Criar uma conta
+- Fazer login
+- Publicar artigos
+- Editar seus artigos
+- Excluir seus artigos
+- Curtir artigos
+- Comentar em artigos
+
+---
+
+## Artigos
+
+Cada artigo possui:
+
+| Campo       | Tipo     |
+| ----------- | -------- |
+| title       | string   |
+| description | string   |
+| content     | string   |
+| tags        | string[] |
+| cover       | string   |
+| createdAt   | Date     |
+
+---
+
+# 📚 Endpoints
+
+## 👤 Usuário
+
+### Cadastro
+
+```
+POST /users/register
 ```
 
-## Compile and run the project
+Body
 
-```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+```json
+{
+  "name": "Guilherme",
+  "email": "guilherme@email.com",
+  "password": "123456"
+}
 ```
 
-## Run tests
+---
 
-```bash
-# unit tests
-$ pnpm run test
+### Login
 
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+```
+POST /auth/login
 ```
 
-## Deployment
+Body
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+```json
+{
+  "email": "guilherme@email.com",
+  "password": "123456"
+}
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+---
 
-## Resources
+## 📝 Artigos
 
-Check out a few resources that may come in handy when working with NestJS:
+### Criar artigo
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```
+POST /articles
+```
 
-## Support
+Body
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```json
+{
+  "title": "Meu primeiro artigo",
+  "description": "Descrição",
+  "content": "Conteúdo completo...",
+  "tags": ["nestjs", "typescript"],
+  "cover": "https://..."
+}
+```
 
-## Stay in touch
+---
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Editar artigo
 
-## License
+```
+PUT /articles/:id
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Body
+
+```json
+{
+  "title": "Novo título",
+  "description": "Nova descrição",
+  "content": "Novo conteúdo",
+  "tags": ["backend", "api"],
+  "cover": "https://..."
+}
+```
+
+---
+
+### Excluir artigo
+
+```
+DELETE /articles/:id
+```
+
+---
+
+### Meus artigos
+
+```
+GET /articles/me
+```
+
+Resposta
+
+```json
+[
+  {
+    "title": "Meu artigo",
+    "createdAt": "2026-07-04",
+    "likes": 25,
+    "comments": 8,
+    "tags": ["nestjs", "backend"]
+  }
+]
+```
+
+---
+
+## 🌎 Feed
+
+```
+GET /feed
+```
+
+Retorno
+
+```json
+[
+  {
+    "title": "Aprendendo NestJS",
+    "description": "Introdução ao framework",
+    "image": "https://...",
+    "tags": ["nestjs"],
+    "user": {
+      "name": "Guilherme"
+    },
+    "createdAt": "2026-07-04",
+    "likes": 150,
+    "comments": 37
+  }
+]
+```
+
+---
+
+## 📖 Visualizar artigo
+
+```
+GET /articles/:id
+```
+
+Retorno
+
+```json
+{
+  "title": "Aprendendo NestJS",
+  "description": "Descrição",
+  "content": "Conteúdo completo...",
+  "image": "https://...",
+  "tags": ["nestjs", "typescript"],
+  "user": {
+    "name": "Guilherme"
+  },
+  "createdAt": "2026-07-04",
+  "likes": 100,
+  "comments": [
+    {
+      "user": {
+        "name": "João"
+      },
+      "createdAt": "2026-07-04",
+      "comment": "Excelente artigo!"
+    }
+  ]
+}
+```
+
+---
+
+# 🔒 Autenticação
+
+A API utiliza autenticação baseada em JWT.
+
+Para acessar endpoints protegidos envie o token no header:
+
+```
+Authorization: Bearer <token>
+```
+
+---
+
+# 📦 Instalação
+
+Clone o projeto
+
+```bash
+git clone https://github.com/seu-usuario/artgios-api.git
+```
+
+Instale as dependências
+
+```bash
+pnpm install
+```
+
+Configure o arquivo `.env`
+
+```env
+DATABASE_URL=
+
+JWT_SECRET=
+
+MAIL_HOST=
+MAIL_PORT=
+MAIL_USER=
+MAIL_PASS=
+```
+
+Execute as migrations
+
+```bash
+pnpm prisma migrate dev
+```
+
+Inicie a aplicação
+
+```bash
+pnpm run start:dev
+```
+
+---
+
+# 🛠️ Scripts
+
+```bash
+pnpm run start
+pnpm run start:dev
+pnpm run build
+pnpm run lint
+pnpm run test
+```
+
+---
+
+# 📌 Roadmap
+
+- [x] Autenticação
+- [ ] CRUD de usuários
+- [ ] CRUD de artigos
+- [ ] Sistema de curtidas
+- [ ] Sistema de comentários
+- [ ] Upload de imagens
+- [ ] Pesquisa por tags
+- [ ] Paginação
+- [ ] Perfil do usuário
+- [ ] Favoritos
+- [ ] Testes automatizados
+
+---
+
+# 📄 Licença
+
+Este projeto está licenciado sob a licença MIT.
