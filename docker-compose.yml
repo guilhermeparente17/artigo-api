@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: artigo-api
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: artigoApi
+      POSTGRES_PASSWORD: artigoApi
+      POSTGRES_DB: article-db
+
+    ports:
+      - '5432:5432'
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
