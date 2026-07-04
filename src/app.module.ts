@@ -8,6 +8,7 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { RequestContextService } from './common/services/request-context.service';
+import { ArticlesModule } from './modules/articles/articles.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { RequestContextService } from './common/services/request-context.service
     PrismaModule,
     UsersModule,
     AuthModule,
+    ArticlesModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, RequestContextService],
