@@ -299,10 +299,10 @@ pnpm run test
 # 📌 Roadmap
 
 - [x] Autenticação
-- [ ] CRUD de usuários
-- [ ] CRUD de artigos
-- [ ] Sistema de curtidas
-- [ ] Sistema de comentários
+- [x] CRUD de usuários
+- [x] CRUD de artigos
+- [x] Sistema de curtidas
+- [x] Sistema de comentários
 - [ ] Upload de imagens
 - [ ] Pesquisa por tags
 - [ ] Paginação
