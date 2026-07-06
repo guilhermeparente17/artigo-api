@@ -40,6 +40,8 @@ export class ArticlesService {
       select: {
         id: true,
         title: true,
+        content: true,
+        description: true,
         tags: true,
         cover: true,
         createdAt: true,
