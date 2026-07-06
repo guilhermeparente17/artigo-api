@@ -92,6 +92,13 @@ export class ArticlesService {
             likes: true,
           },
         },
+
+        likes: {
+          select: {
+            id: true,
+            userId: true,
+          },
+        },
       },
     });
   }
