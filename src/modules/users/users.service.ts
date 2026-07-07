@@ -16,6 +16,11 @@ export class UsersService {
         role: true,
         createdAt: true,
         updatedAt: true,
+        _count: {
+          select: {
+            articles: true,
+          },
+        },
       },
     });
   }
@@ -84,5 +89,21 @@ export class UsersService {
         id,
       },
     });
+  }
+
+  async summary() {
+    const [users, likes, comments, articles] = await Promise.all([
+      this.prisma.user.count(),
+      this.prisma.like.count(),
+      this.prisma.comment.count(),
+      this.prisma.article.count(),
+    ]);
+
+    return {
+      users,
+      likes,
+      comments,
+      articles,
+    };
   }
 }

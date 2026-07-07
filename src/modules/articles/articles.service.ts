@@ -25,8 +25,29 @@ export class ArticlesService {
           },
         },
         createdAt: true,
-        //likes
-        //comments
+        comments: {
+          select: {
+            id: true,
+            content: true,
+            user: {
+              select: {
+                name: true,
+                email: true,
+              },
+            },
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+          },
+        },
+        likes: {
+          select: {
+            id: true,
+            userId: true,
+          },
+        },
       },
     });
   }
@@ -47,8 +68,24 @@ export class ArticlesService {
         createdAt: true,
         updatedAt: true,
 
-        //likes
-        //comments
+        comments: {
+          select: {
+            id: true,
+            content: true,
+            user: {
+              select: {
+                name: true,
+                email: true,
+              },
+            },
+          },
+        },
+        likes: {
+          select: {
+            id: true,
+            userId: true,
+          },
+        },
       },
     });
   }

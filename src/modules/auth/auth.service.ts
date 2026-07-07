@@ -1,8 +1,12 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { LoginDto, RegisterDto } from './auth.dto';
+import { LoginDto, RegisterDto, ResetPasswordDto } from './auth.dto';
 import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
 
@@ -50,5 +54,45 @@ export class AuthService {
     }
 
     throw new UnauthorizedException();
+  }
+
+  async resetPassword(data: ResetPasswordDto) {
+    const user = await this.userService.findUserByEmail(data.email);
+
+    if (!user) {
+      throw new UnauthorizedException('Credenciais inválidas.');
+    }
+
+    const passwordMatches = await bcrypt.compare(
+      data.currentPassword,
+      user.password,
+    );
+
+    if (!passwordMatches) {
+      throw new UnauthorizedException('Senha atual incorreta.');
+    }
+
+    const samePassword = await bcrypt.compare(data.newPassword, user.password);
+
+    if (samePassword) {
+      throw new BadRequestException(
+        'A nova senha deve ser diferente da atual.',
+      );
+    }
+
+    const hash = await bcrypt.hash(data.newPassword, 12);
+
+    await this.prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        password: hash,
+      },
+    });
+
+    return {
+      message: 'Senha atualizada com sucesso!',
+    };
   }
 }

@@ -49,3 +49,22 @@ export class LoginDto {
   @IsNotEmpty()
   password: string;
 }
+
+export class ResetPasswordDto {
+  @ApiProperty({ description: 'User email', uniqueItems: true })
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
+  @ApiProperty({ description: 'User current password', minLength: 6 })
+  @IsString()
+  @MinLength(6)
+  @IsNotEmpty()
+  currentPassword: string;
+
+  @ApiProperty({ description: 'User current password', minLength: 6 })
+  @IsString()
+  @MinLength(6)
+  @IsNotEmpty()
+  newPassword: string;
+}
