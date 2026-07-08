@@ -15,6 +15,11 @@ async function bootstrap() {
     type: VersioningType.URI,
   });
 
+  app.enableCors({
+    origin: ['http://localhost:5173', 'https://artigo-front.vercel.app'],
+    credentials: true,
+  });
+
   //Swagger
   const config = new DocumentBuilder()
     .setTitle('Artigo Api - Plataforma de artigos')
