@@ -9,6 +9,7 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { ArticlesService } from './articles.service';
 import { CreateArticleDto } from './dto/create-article.dto';
@@ -17,6 +18,7 @@ import { JwtAuthGuard } from 'src/common/guards/jwt-guard.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { RolesGuard } from 'src/common/guards/role-guard.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
+import { ArticleFilterDto } from './dto/article-filter.dto';
 
 @Controller({
   version: '1',
@@ -27,21 +29,19 @@ import { Roles } from 'src/common/decorators/roles.decorator';
 export class ArticlesController {
   constructor(private readonly articlesService: ArticlesService) {}
 
-  @Roles('USER')
   @Post()
   create(@Body() createArticleDto: CreateArticleDto) {
     return this.articlesService.create(createArticleDto);
   }
 
-  @Roles('USER')
   @Get('me')
-  findAllByUser() {
-    return this.articlesService.findAllByUser();
+  findAllByUser(@Query() filters: ArticleFilterDto) {
+    return this.articlesService.findAllByUser(filters);
   }
 
   @Get()
-  findAll() {
-    return this.articlesService.findAll();
+  findAll(@Query() filters: ArticleFilterDto) {
+    return this.articlesService.findAll(filters);
   }
 
   @Get(':id')
@@ -50,7 +50,6 @@ export class ArticlesController {
   }
 
   @Patch(':id')
-  @Roles('USER')
   update(@Param('id') id: string, @Body() updateArticleDto: UpdateArticleDto) {
     return this.articlesService.update(id, updateArticleDto);
   }

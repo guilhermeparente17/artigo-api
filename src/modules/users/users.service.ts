@@ -2,27 +2,92 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { UsersFiltersDto } from './dto/users-filter.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findAll() {
-    return this.prisma.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-        _count: {
-          select: {
-            articles: true,
+  async findAll(filters: UsersFiltersDto) {
+    const { page = 1, limit = 10, search, email, role } = filters;
+
+    const skip = (page - 1) * limit;
+
+    const [users, total] = await Promise.all([
+      this.prisma.user.findMany({
+        where: {
+          ...(search && {
+            name: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          }),
+
+          ...(email && {
+            email: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          }),
+
+          ...(role && {
+            role,
+          }),
+        },
+        skip,
+        take: limit,
+        orderBy: {
+          createdAt: 'desc',
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true,
+          _count: {
+            select: {
+              articles: true,
+            },
           },
         },
+      }),
+
+      this.prisma.user.count({
+        where: {
+          ...(search && {
+            name: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          }),
+
+          ...(email && {
+            email: {
+              contains: email,
+              mode: 'insensitive',
+            },
+          }),
+
+          ...(role && {
+            role,
+          }),
+        },
+      }),
+    ]);
+
+    return {
+      data: users,
+
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
       },
-    });
+    };
   }
 
   async findUserByEmail(email: string) {

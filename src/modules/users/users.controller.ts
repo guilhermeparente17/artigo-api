@@ -9,6 +9,7 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,6 +17,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiResponse } from '@nestjs/swagger';
 import { UserListDto } from './dto/list-user.dto';
 import { JwtAuthGuard } from 'src/common/guards/jwt-guard.guard';
+import { UsersFiltersDto } from './dto/users-filter.dto';
 
 @Controller({
   version: '1',
@@ -37,8 +39,8 @@ export class UsersController {
 
   @Get()
   @ApiResponse({ type: [UserListDto] })
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Query() filters: UsersFiltersDto) {
+    return this.usersService.findAll(filters);
   }
 
   @Get(':id')
