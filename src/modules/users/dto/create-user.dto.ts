@@ -27,6 +27,15 @@ export class CreateUserDto {
   password: string;
 
   @ApiProperty({
+    description: 'User avatar URL',
+    required: false,
+    example: 'https://lh3.googleusercontent.com/a/ACg8ocK...',
+  })
+  @IsString()
+  @IsOptional()
+  avatar?: string;
+
+  @ApiProperty({
     description: 'USer role',
     enum: Role,
     default: Role.USER,

@@ -9,14 +9,18 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginDto, RegisterDto, ResetPasswordDto } from './auth.dto';
 import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
+import { OAuth2Client } from 'google-auth-library';
 
 @Injectable()
 export class AuthService {
+  private googleClient: OAuth2Client;
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly userService: UsersService,
-    private readonly jwtService: JwtService,
-  ) {}
+    private prisma: PrismaService,
+    private userService: UsersService,
+    private jwtService: JwtService,
+  ) {
+    this.googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+  }
 
   async register(data: RegisterDto) {
     // criar uma hash
@@ -36,10 +40,61 @@ export class AuthService {
     };
   }
 
+  async googleLogin(credential: string) {
+    const ticket = await this.googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    if (!payload?.email) {
+      throw new UnauthorizedException(
+        'Não foi possível obter o email do Google',
+      );
+    }
+
+    const { email, name, picture, sub: googleId } = payload;
+
+    let user = await this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      user = await this.prisma.user.create({
+        data: {
+          email,
+          name: name ?? 'Usuário Google',
+          password: null,
+          googleId,
+          avatar: picture,
+          role: 'USER',
+        },
+      });
+    }
+
+    const accessToken = this.jwtService.sign({
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+    });
+
+    return {
+      token: accessToken,
+      user,
+    };
+  }
+
   async login(data: LoginDto) {
     const user = await this.userService.findUserByEmail(data.email);
 
-    if (user && (await bcrypt.compare(data.password, user.password))) {
+    if (
+      user &&
+      user.password &&
+      (await bcrypt.compare(data.password, user.password))
+    ) {
       return {
         token: this.jwtService.sign({
           sub: user.id,
@@ -63,16 +118,16 @@ export class AuthService {
       throw new UnauthorizedException('Credenciais inválidas.');
     }
 
-    const passwordMatches = await bcrypt.compare(
-      data.currentPassword,
-      user.password,
-    );
+    const passwordMatches =
+      user.password &&
+      (await bcrypt.compare(data.currentPassword, user.password));
 
     if (!passwordMatches) {
       throw new UnauthorizedException('Senha atual incorreta.');
     }
 
-    const samePassword = await bcrypt.compare(data.newPassword, user.password);
+    const samePassword =
+      user.password && (await bcrypt.compare(data.newPassword, user.password));
 
     if (samePassword) {
       throw new BadRequestException(
