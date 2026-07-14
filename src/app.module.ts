@@ -11,6 +11,7 @@ import { RequestContextService } from './common/services/request-context.service
 import { ArticlesModule } from './modules/articles/articles.module';
 import { CommentsModule } from './modules/comments/comments.module';
 import { LikesModule } from './modules/likes/likes.module';
+import { MailModule } from './modules/mail/mail.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { LikesModule } from './modules/likes/likes.module';
     ArticlesModule,
     CommentsModule,
     LikesModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, RequestContextService],

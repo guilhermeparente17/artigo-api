@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -10,6 +11,7 @@ import { LoginDto, RegisterDto, ResetPasswordDto } from './auth.dto';
 import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
 import { OAuth2Client } from 'google-auth-library';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -18,21 +20,31 @@ export class AuthService {
     private prisma: PrismaService,
     private userService: UsersService,
     private jwtService: JwtService,
+    private readonly mailService: MailService,
   ) {
     this.googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
   }
 
   async register(data: RegisterDto) {
-    // criar uma hash
+    const userExists = await this.prisma.user.findFirst({
+      where: {
+        email: data.email,
+      },
+    });
+
+    if (userExists) {
+      throw new BadRequestException('E-mail já está em uso.');
+    }
+
     const hash = await bcrypt.hash(data.password, 12);
 
-    // criar um novo usuario
     const newUser = await this.userService.create({
       ...data,
       password: hash,
     });
 
-    // devolver um token
+    await this.mailService.sendWelcomeEmail(newUser);
+
     return {
       token: this.jwtService.sign({
         sub: newUser.id,

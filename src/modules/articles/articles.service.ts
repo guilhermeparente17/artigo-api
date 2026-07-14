@@ -92,6 +92,7 @@ export class ArticlesService {
           _count: {
             select: {
               likes: true,
+              comments: true,
             },
           },
 
@@ -197,6 +198,7 @@ export class ArticlesService {
           _count: {
             select: {
               likes: true,
+              comments: true,
             },
           },
         },

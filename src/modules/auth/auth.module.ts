@@ -7,6 +7,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt-strategy';
 import 'dotenv/config';
+import { MailService } from '../mail/mail.service';
 
 @Module({
   imports: [
@@ -19,6 +20,12 @@ import 'dotenv/config';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, PrismaService, UsersService, JwtStrategy],
+  providers: [
+    AuthService,
+    PrismaService,
+    UsersService,
+    JwtStrategy,
+    MailService,
+  ],
 })
 export class AuthModule {}
